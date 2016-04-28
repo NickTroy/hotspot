@@ -1,0 +1,48 @@
+<script>
+  $(document).ready(funсtion(){
+    $( "#tabs" ).tabs({
+      collapsible: false
+    });    
+  });
+    
+</script>
+   
+<div class="container">
+  <div id="tabs">
+    <ul>
+      <li><a href="#tabs-1">All Collections</a></li>
+      <li><a href="#tabs-2">Interfaces</a></li>
+    </ul>
+    <div id="tabs-1" class="collections_listing">      
+      <h3>All Collections</h3>
+        <div class="row products_table">
+          <div class="col-md-2 col-lg-2"><strong>Collection Title</strong></div>
+          <div class="col-md-2 col-lg-2 text-center"><strong>Image</strong></div>
+          <div class="col-md-3 col-lg-3"><strong>Description</strong></div>
+          <div class="col-md-1 col-lg-1 text-center"><strong>Delete?</strong></div>
+          
+        </div>
+
+       <% @collections.each do |collection| %>
+          <div class="row products_table">
+            <div class="col-md-2 col-lg-2">
+              <%= collection.title %> 
+            </div>
+            <div class="col-md-2 col-lg-2 text-center">
+              
+            </div>
+            <div class="col-md-3 col-lg-3" style="height:150px; overflow:hidden;">
+              
+            </div>
+            
+            <div class="col-md-1 col-lg-1 text-center">
+              <%= 'Delete' %>      
+              
+            </div>
+          </div>
+        <% end %>
+        
+    </div>
+    <div id="tabs-2">
+        
+    </div>

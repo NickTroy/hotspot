@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     get 'logout' => :destroy, :as => :logout
   end
 
-  root :to => 'home#index'
+  root :to => 'collections#index'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
