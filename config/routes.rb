@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
   
+  resources :collections
+  
   controller :sessions do
     get 'login' => :new, :as => :login
     post 'login' => :create, :as => :authenticate
     get 'auth/shopify/callback' => :callback
     get 'logout' => :destroy, :as => :logout
   end
-
+  
   root :to => 'collections#index'
   
   # The priority is based upon order of creation: first created -> highest priority.

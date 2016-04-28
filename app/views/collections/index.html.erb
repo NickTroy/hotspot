@@ -1,11 +1,4 @@
-<script>
-  $(document).ready(funсtion(){
-    $( "#tabs" ).tabs({
-      collapsible: false
-    });    
-  });
-    
-</script>
+
    
 <div class="container">
   <div id="tabs">
@@ -15,33 +8,33 @@
     </ul>
     <div id="tabs-1" class="collections_listing">      
       <h3>All Collections</h3>
-        <div class="row products_table">
-          <div class="col-md-2 col-lg-2"><strong>Collection Title</strong></div>
-          <div class="col-md-2 col-lg-2 text-center"><strong>Image</strong></div>
-          <div class="col-md-3 col-lg-3"><strong>Description</strong></div>
-          <div class="col-md-1 col-lg-1 text-center"><strong>Delete?</strong></div>
-          
-        </div>
-
-       <% @collections.each do |collection| %>
-          <div class="row products_table">
-            <div class="col-md-2 col-lg-2">
-              <%= collection.title %> 
-            </div>
-            <div class="col-md-2 col-lg-2 text-center">
-              
-            </div>
-            <div class="col-md-3 col-lg-3" style="height:150px; overflow:hidden;">
-              
-            </div>
-            
-            <div class="col-md-1 col-lg-1 text-center">
-              <%= 'Delete' %>      
-              
-            </div>
-          </div>
-        <% end %>
+      <div class="row collections_row">
+        <div class="col-md-2 col-lg-2"><strong>Collection Title</strong></div>
+        <div class="col-md-2 col-lg-2 text-center"><strong>Image</strong></div>
+        <div class="col-md-3 col-lg-3"><strong>Description</strong></div>
+        <div class="col-md-1 col-lg-1 text-center"><strong>Delete?</strong></div>
         
+      </div>
+      <% @collections.each do |collection| %>
+        <div class="row collections_row">
+          <div class="col-md-2 col-lg-2">
+            <%= link_to collection.title, edit_collection_url(:id => collection.id, :protocol => 'https', :collection_type => collection.class) %> 
+          </div>
+          <div class="col-md-2 col-lg-2 text-center">
+            
+          </div>
+          <div class="col-md-3 col-lg-3" style="height:150px; overflow:hidden;">
+            <%= render :html => collection.body_html.html_safe %>
+          </div>
+          
+          <div class="col-md-1 col-lg-1 text-center">
+            <%= link_to 'Delete', collection_url(collection.id, :protocol => 'https'), 
+                { :method => :delete, class: "btn btn-danger",
+                data: { confirm: 'Are you sure, you want to delete this collection?' } } %> 
+          </div>
+        </div>
+      <% end %>
+    <%= link_to "Create New Collection", new_collection_path, :class => "btn btn-primary" %>        
     </div>
     <div id="tabs-2">
         

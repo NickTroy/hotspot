@@ -5,6 +5,9 @@
 @import "jquery-ui/theme";
 @import "jquery-ui/tabs";
 
+.container {
+  width: 85%;
+}
 /*
  *= require jquery-ui
  *= require jquery-ui/core

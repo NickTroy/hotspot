@@ -15,4 +15,5 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require jquery-ui
+//= require tinymce-jquery
 //= require_tree .

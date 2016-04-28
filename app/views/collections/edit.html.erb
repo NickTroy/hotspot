@@ -1,0 +1,92 @@
+<div class="container">
+  <%= form_tag collection_path, method: "patch", :html => { :controller => "collections", :action => "update", :id => @collection.id } do %>
+
+  <div class="row">
+    <div class="col-md-2">
+      <%= submit_tag "Back to all collections", :class => "btn btn-info" %>
+    </div>
+  </div><br>
+
+  <div class="row">
+    <input type="hidden" name="collection_type" value="<%= @collection.class %>">
+    <div cilass="col-md-12 form-group">
+      <%= label_tag 'collection[title]', "Collection title:" %>
+      <%= text_field_tag :title, @collection.title, class: "form-control" %>  
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 form-group">
+      <%= label_tag 'collection[body_html]', "Collection description:" %>
+      <%= text_area_tag :body_html, @collection.body_html, class: "tinymce form-control" %>
+      <script> 
+      //<![CDATA[
+        (function() {
+          if (typeof tinyMCE != 'undefined') {
+            tinyMCE.init({
+              selector: "textarea.tinymce",
+              statusbar: false,
+              menubar: false,
+              resize: false,
+              setup: function (editor) {
+                editor.on('change', function (e) {  
+                  enable_save();
+                });
+              },
+              theme: "modern",
+              fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt",
+              font_formats: "Andale Mono=andale mono,times;"+
+              "Arial=arial,helvetica,sans-serif;"+
+              "Arial Black=arial black,avant garde;"+
+              "Book Antiqua=book antiqua,palatino;"+
+              "Comic Sans MS=comic sans ms,sans-serif;"+
+              "Courier New=courier new,courier;"+
+              "Georgia=georgia,palatino;"+
+              "Helvetica=helvetica;"+
+              "Impact=impact,chicago;"+
+              "Symbol=symbol;"+
+              "Tahoma=tahoma,arial,helvetica,sans-serif;"+
+              "Terminal=terminal,monaco;"+
+              "Times New Roman=times new roman,times;"+
+              "Trebuchet MS=trebuchet ms,geneva;"+
+              "Verdana=verdana,geneva;"+
+              "Webdings=webdings;"+
+              "Wingdings=wingdings,zapf dingbats; Open Sans='Open Sans', sans-serif;Playfair Display='Playfair Display', serif;",
+              toolbar: ["undo redo | removeformat bold italic underline | fontsizeselect | forecolor backcolor | fontselect | letterspacing | lineheight"],
+              plugins: "textcolor"
+            });
+          } else {
+            setTimeout(arguments.callee, 50);
+          }
+        })();
+      //]]>
+      </script>      
+    </div>
+  </div>
+  
+  <div class="products_container row">
+    
+  </div>
+
+  <div class="images-container row">
+    <div class="col-md-12">
+      <h2>PRODUCT IMAGE FOR SKETCHES</h2>
+      <div class="dropzone-previews dropzone"> 
+        <div class="dz-default dz-message"><span>Drop files here to upload</span>
+        </div>
+      </div>  
+    </div><br>  
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-2">
+      <%= submit_tag "Save collection information", :class => "btn btn-success" %>
+    </div>
+  </div>
+  
+  <% end %>
+</div>
+
+
+
