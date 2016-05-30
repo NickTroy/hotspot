@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   
-  resources :collections
+  resources :collections do
+    delete '/unassign_product', to: "collections#unassign_product"
+    post '/update_collection_image', to: 'collections#update_collection_image'
+  end
   
   controller :sessions do
     get 'login' => :new, :as => :login

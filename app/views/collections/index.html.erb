@@ -24,7 +24,7 @@
             
           </div>
           <div class="col-md-3 col-lg-3" style="height:150px; overflow:hidden;">
-            <%= render :html => collection.body_html.html_safe %>
+            <%= render :html => collection.body_html.html_safe unless collection.body_html.nil? %>
           </div>
           
           <div class="col-md-1 col-lg-1 text-center">

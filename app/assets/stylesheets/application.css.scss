@@ -4,9 +4,25 @@
 @import "jquery-ui/core";
 @import "jquery-ui/theme";
 @import "jquery-ui/tabs";
+@import "dropzone/dropzone";
 
 .container {
   width: 85%;
+}
+.dz-error-message {
+  display: none;  
+}
+.dz-success-mark {
+  display: none;  
+}
+.dz-error-mark {
+  display: none;  
+}
+.dz-image {
+  width: 135px !important;
+}
+.dz-preview {
+  display: inline-block;
 }
 /*
  *= require jquery-ui
@@ -27,6 +43,8 @@
  * file per style scope.
  *
  *= require bootstrap
+ *= require dropzone/basic
+ *= require dropzone/dropzone
  *= require_tree .
  *= require_self
  */

@@ -1,3 +1,112 @@
+<style>
+  .dz-error-message {
+    display: none;  
+  }
+  .dz-success-mark {
+    display: none;  
+  }
+  .dz-error-mark {
+    display: none;  
+  }
+  .dz-image img {
+    width: 135px !important;
+  }
+  .dz-preview {
+    display: inline-block;
+  }
+  .dz-details {
+    display: none;
+  }
+  .dz-progress {
+    display: none;
+  }
+</style>
+<script type="text/javascript">
+//collection image dropzone
+$(document).ready(function(){
+  Dropzone.autoDiscover = false;
+  $("#collection-image").dropzone({
+    // restrict image size to a maximum 1MB
+    url: "<%= collection_update_collection_image_url(:collection_id => @collection.id, :protocol => 'https') %>",
+    maxFilesize: 1,
+    //method: "POST",
+    // changed the passed param to one accepted by
+    // our rails app
+    paramName: "image",
+    previewsContainer: '.dropzone-previews',
+    clickable: '.dropzone-previews',
+    // show remove links on each image upload
+    addRemoveLinks: true,
+    success: function(file, response){
+      // find the remove button link of the uploaded file and give it an id
+      // based of the fileID response from the server
+      $('.dropzone-previews').find('.dz-remove:last').attr('id', response.imageID);
+      // add the dz-success class (the green tick sign)
+      //$('.dropzone-previews').addClass("dz-success");
+      if ( $('.dropzone-previews').find('.dz-preview').length === 3) {
+        $('.dropzone-previews').find('.dz-remove:first').trigger('click');
+        $('.dropzone-previews').find('.dz-preview:first').remove();
+      }  
+      $('.dz-remove:last').click(function(){
+        var id = $(this).attr('id'); 
+        // make a DELETE ajax request to delete the file
+        $.ajax({
+          type: 'POST',
+          data: { _method: 'DELETE' },
+          url: '<%= %>/' + id,
+          success: function(data){
+            console.log(data.message);
+          }
+        });
+      })		
+    },
+    //when the remove button is clicked
+    init: function(){
+      var existingFiles = [];
+        existingFiles.push({ id: "<%= @collection.id %>"});
+        this.emit("addedfile", existingFiles[0]);
+        this.emit("thumbnail", existingFiles[0], "<%= @collection.image.src %>");
+        $('.dropzone-previews').find('.dz-remove:last').attr('id', <%= @collection.id %>);
+    }
+		
+  });	
+	
+  $('.dz-remove').click(function(){
+    var id = $(this).attr('id'); 
+    // make a DELETE ajax request to delete the file
+    $.ajax({
+      type: 'POST',
+      data: { _method: 'DELETE' },
+      url: '<%=  %>/' + id,
+      success: function(data){
+        console.log(data.message);
+      }
+    });
+  })
+	
+});
+  
+</script>
+
+<script>
+  $(document).ready(function(){
+    $('.unassign_product').click(function(){
+      var this_product_row = $(this).parents(".product_row");
+      var product_id = $(this).data("product_id");
+      $.ajax({
+        url: "<%= collection_unassign_product_url(protocol: 'https', collection_id: @collection.id) %>",
+        method: "POST",
+        data: {
+          product_id: product_id,
+          _method: "DELETE"
+        },
+        success: function(){
+          this_product_row.remove();
+        }
+      })
+    })
+  })
+</script>
 <div class="container">
   <%= form_tag collection_path, method: "patch", :html => { :controller => "collections", :action => "update", :id => @collection.id } do %>
 
@@ -8,15 +117,20 @@
   </div><br>
 
   <div class="row">
-    <input type="hidden" name="collection_type" value="<%= @collection.class %>">
-    <div cilass="col-md-12 form-group">
+    <div class="col-md-8 form-group">
       <%= label_tag 'collection[title]', "Collection title:" %>
       <%= text_field_tag :title, @collection.title, class: "form-control" %>  
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-12 form-group">
+    
+    <div class="col-md-4 images_container pull-right">
+      <h2>Featured Image</h2>
+      <div class="dropzone-previews dropzone"> 
+        <div class="dz-default dz-message"><span>Drop files here to upload</span>
+        </div>
+      </div>  
+    </div>
+    
+    <div class="col-md-8 form-group">
       <%= label_tag 'collection[body_html]', "Collection description:" %>
       <%= text_area_tag :body_html, @collection.body_html, class: "tinymce form-control" %>
       <script> 
@@ -62,22 +176,25 @@
       //]]>
       </script>      
     </div>
+ 
   </div>
   
   <div class="products_container row">
-    
-  </div>
-
-  <div class="images-container row">
     <div class="col-md-12">
-      <h2>PRODUCT IMAGE FOR SKETCHES</h2>
-      <div class="dropzone-previews dropzone"> 
-        <div class="dz-default dz-message"><span>Drop files here to upload</span>
+      <div class="col-md-2 col-lg-2"><strong>Product Title</strong></div>
+      <div class="col-md-2 col-lg-2 text-center"><strong>Image</strong></div>
+      <div class="col-md-1 col-lg-1 text-center"><strong>Unassign product from collection</strong></div>
+    </div>
+    <% @collection_products.each do |product| %>
+      <div class="col-md-12 product_row">
+        <div class="col-md-2 col-lg-2"><%= product.title %></div>
+        <div class="col-md-2 col-lg-2 text-center">
+          <%= img_tag product.image.src unless product.image.nil? %>
         </div>
-      </div>  
-    </div><br>  
+        <div class="col-md-1 col-lg-1 text-center unassign_product" data-product_id="<%= product.id %>"><strong>X</strong></div>
+      </div>
+    <% end %>
   </div>
-
 
   <div class="row">
     <div class="col-md-2">
@@ -87,6 +204,10 @@
   
   <% end %>
 </div>
+
+<form id="collection-image" action="" method="post" name="collection-image-dropzone">
+  <input id="image" style="display:none;" name="image" type="file">
+</form>
 
 
 

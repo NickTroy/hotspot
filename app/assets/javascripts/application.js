@@ -16,4 +16,5 @@
 //= require bootstrap-sprockets
 //= require jquery-ui
 //= require tinymce-jquery
+//= require dropzone
 //= require_tree .

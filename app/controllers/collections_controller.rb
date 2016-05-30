@@ -1,7 +1,8 @@
 class CollectionsController < AuthenticatedController
+  require 'base64'
+  skip_before_action :verify_authenticity_token
   def index
     @collections = ShopifyAPI::CustomCollection.all.to_a
-    #@collections += ShopifyAPI::SmartCollection.all.to_a
   end 
   
   def new
@@ -9,13 +10,8 @@ class CollectionsController < AuthenticatedController
   end
   
   def edit
-    #collection_type = params[:collection_type]
-    #if collection_type == "ShopifyAPI::CustomCollection"
-      @collection = ShopifyAPI::CustomCollection.find(params[:id])
+    @collection = ShopifyAPI::CustomCollection.find(params[:id])
     @collection_products = @collection.products
-    #else
-    #  @collection = ShopifyAPI::SmartCollection.find(params[:id])
-    #end
   end
   
   def create
@@ -36,13 +32,7 @@ class CollectionsController < AuthenticatedController
       return true
     end
     
-    #collection_type = params[:collection_type]
-    #if collection_type == "ShopifyAPI::CustomCollection"
     @collection = ShopifyAPI::CustomCollection.find(params[:id])
-    #else
-    #  @collection = ShopifyAPI::SmartCollection.find(params[:id])
-    #end
-    
     @collection_products = @collection.products
 
     respond_to do |format|
@@ -61,6 +51,23 @@ class CollectionsController < AuthenticatedController
     end
   end
   
+  def unassign_product
+    @collect = ShopifyAPI::Collect.where(product_id: params[:product_id], collection_id: params[:collection_id])[0]
+    if @collect.destroy
+      render json: { message: "unassigned" }, status: 200
+    end
+  end
+  
+  def update_collection_image
+    @collection = ShopifyAPI::CustomCollection.find(params[:collection_id])
+    attachment = attachment = Base64.encode64(params[:image].tempfile.read)
+    binding.pry
+    if @collection.update_attributes(image: { attachment: attachment })
+      render json: { message: "unassigned" }, status: 200
+    else
+      render json: { message: "failed" }, status: 500
+    end
+  end
   
   private
 
