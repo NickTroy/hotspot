@@ -12,6 +12,11 @@ class CollectionsController < AuthenticatedController
   def edit
     @collection = ShopifyAPI::CustomCollection.find(params[:id])
     @collection_products = @collection.products
+    begin 
+      @collection_image_src = @collection.image.src
+    rescue
+      @collection_image_src = ""
+    end
   end
   
   def create
@@ -58,10 +63,18 @@ class CollectionsController < AuthenticatedController
     end
   end
   
+  def delete_image
+    @collection = ShopifyAPI::CustomCollection.find(params[:collection_id])
+    if @collection.update_attributes(:image => "")
+      render json: { message: "deleted" }, status: 200
+    else
+      render json: { message: "failed" }, status: 500
+    end
+  end
+  
   def update_collection_image
     @collection = ShopifyAPI::CustomCollection.find(params[:collection_id])
     attachment = attachment = Base64.encode64(params[:image].tempfile.read)
-    binding.pry
     if @collection.update_attributes(image: { attachment: attachment })
       render json: { message: "unassigned" }, status: 200
     else

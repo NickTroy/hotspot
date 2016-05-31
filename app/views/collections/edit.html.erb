@@ -26,58 +26,43 @@
 $(document).ready(function(){
   Dropzone.autoDiscover = false;
   $("#collection-image").dropzone({
-    // restrict image size to a maximum 1MB
     url: "<%= collection_update_collection_image_url(:collection_id => @collection.id, :protocol => 'https') %>",
     maxFilesize: 1,
-    //method: "POST",
-    // changed the passed param to one accepted by
-    // our rails app
     paramName: "image",
     previewsContainer: '.dropzone-previews',
     clickable: '.dropzone-previews',
-    // show remove links on each image upload
     addRemoveLinks: true,
     success: function(file, response){
-      // find the remove button link of the uploaded file and give it an id
-      // based of the fileID response from the server
-      $('.dropzone-previews').find('.dz-remove:last').attr('id', response.imageID);
-      // add the dz-success class (the green tick sign)
-      //$('.dropzone-previews').addClass("dz-success");
-      if ( $('.dropzone-previews').find('.dz-preview').length === 3) {
-        $('.dropzone-previews').find('.dz-remove:first').trigger('click');
+      if ( $('.dropzone-previews').find('.dz-preview').length === 2) {
         $('.dropzone-previews').find('.dz-preview:first').remove();
-      }  
-      $('.dz-remove:last').click(function(){
-        var id = $(this).attr('id'); 
-        // make a DELETE ajax request to delete the file
+      }
+      $('.dz-remove').click(function(){
         $.ajax({
-          type: 'POST',
-          data: { _method: 'DELETE' },
-          url: '<%= %>/' + id,
+         type: 'POST',
+           data: { _method: 'DELETE' },
+          url: '<%= collection_delete_image_url(collection_id: @collection.id, protocol: "https") %>',
           success: function(data){
             console.log(data.message);
           }
         });
-      })		
+      })
     },
-    //when the remove button is clicked
     init: function(){
+      <% unless @collection_image_src == "" %>
       var existingFiles = [];
-        existingFiles.push({ id: "<%= @collection.id %>"});
-        this.emit("addedfile", existingFiles[0]);
-        this.emit("thumbnail", existingFiles[0], "<%= @collection.image.src %>");
-        $('.dropzone-previews').find('.dz-remove:last').attr('id', <%= @collection.id %>);
+      existingFiles.push({ id: "<%= @collection.id %>"});
+      this.emit("addedfile", existingFiles[0]);
+      this.emit("thumbnail", existingFiles[0], "<%= @collection_image_src %>");
+      <% end %>
     }
 		
   });	
 	
   $('.dz-remove').click(function(){
-    var id = $(this).attr('id'); 
-    // make a DELETE ajax request to delete the file
     $.ajax({
       type: 'POST',
       data: { _method: 'DELETE' },
-      url: '<%=  %>/' + id,
+      url: '<%= collection_delete_image_url(collection_id: @collection.id, protocol: "https") %>',
       success: function(data){
         console.log(data.message);
       }
