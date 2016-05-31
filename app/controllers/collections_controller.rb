@@ -12,6 +12,8 @@ class CollectionsController < AuthenticatedController
   def edit
     @collection = ShopifyAPI::CustomCollection.find(params[:id])
     @collection_products = @collection.products
+    @product_builder_collection = ShopifyAPI::SmartCollection.where(:title => "Product_builder_products")[0]
+    @all_products = ShopifyAPI::Product.find(:all, :params => { :limit => 250, :collection_id => @product_builder_collection.id})
     begin 
       @collection_image_src = @collection.image.src
     rescue
@@ -60,6 +62,21 @@ class CollectionsController < AuthenticatedController
     @collect = ShopifyAPI::Collect.where(product_id: params[:product_id], collection_id: params[:collection_id])[0]
     if @collect.destroy
       render json: { message: "unassigned" }, status: 200
+    end
+  end
+  
+  def assign_product
+    @collect = ShopifyAPI::Collect.new(product_id: params[:product_id], collection_id: params[:collection_id])
+    @product = ShopifyAPI::Product.find(params[:product_id])
+    @product_image_source = ""
+    unless @product.image.nil?
+      @product_image_source = @product.image.src
+    end
+    if @collect.save
+      binding.pry
+      render json: { product_title: @product.title, product_image_src: @product_image_src }, status: 200
+    else
+      render json: { message: "failed" }, status: 500
     end
   end
   

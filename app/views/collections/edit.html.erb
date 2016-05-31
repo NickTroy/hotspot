@@ -90,7 +90,54 @@ $(document).ready(function(){
         }
       })
     })
-  })
+    
+    /*var availableProducts = [
+      <% @all_products.each do |product| %>
+      '<%= product.title %>',
+      <% end %>
+    ];
+    $("#add_products").autocomplete({
+      source: availableProducts
+    });*/
+    $('.add_product_to_collection').click(function(e){
+      e.preventDefault();
+      var product_id = $('.select_product').val();
+      $.ajax({
+        url: '<%= collection_assign_product_url(collection_id: @collection.id, protocol: 'https') %>',
+        method: 'POST',
+        data: {
+          product_id: product_id
+        },
+        success: function(product_info){
+          /*var product_title = product_info.product_title;
+          var product_image_src = product_info.product_image_src;
+          $('.select_product').find('option[value="' + product_id + '"]').remove();
+          $('<div class="col-md-12 product_row">' +
+              '<div class="col-md-2 col-lg-2">' + product_title + '</div>' +
+              '<div class="col-md-2 col-lg-2 text-center">' +
+                '<img src="' + product_image_src + '">' +
+              '</div>' +
+              '<div class="col-md-1 col-lg-1 text-center unassign_product" data-product_id="' + product_id + '"><strong>X</strong></div>' +
+            '</div>').insertAfter('.product_row:last');
+          $('.unassign_product:last').click(function(){
+            var this_product_row = $(this).parents(".product_row");
+            var product_id = $(this).data("product_id");
+            $.ajax({
+              url: "<%= collection_unassign_product_url(protocol: 'https', collection_id: @collection.id) %>",
+              method: "POST",
+              data: {
+                product_id: product_id,
+                _method: "DELETE"
+              },
+              success: function(){
+                this_product_row.remove();
+              }
+            })
+          })*/
+        }
+      })
+    });
+  });
 </script>
 <div class="container">
   <%= form_tag collection_path, method: "patch", :html => { :controller => "collections", :action => "update", :id => @collection.id } do %>
@@ -169,6 +216,23 @@ $(document).ready(function(){
       <div class="col-md-2 col-lg-2"><strong>Product Title</strong></div>
       <div class="col-md-2 col-lg-2 text-center"><strong>Image</strong></div>
       <div class="col-md-1 col-lg-1 text-center"><strong>Unassign product from collection</strong></div>
+    </div>
+    <div class="col-md-3">
+      <label>Add products: </label>
+      <select class="select_product form-control" id="add_products">
+        <option value=0>-Select product-</option>
+        <% @all_products.each do |product| %>
+          <% unless @collection_products.include? product %>
+          <option value="<%= product.id %>"><%= product.title %></option>
+          <% end %>
+        <% end %>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <br>
+      <button class="add_product_to_collection btn btn-primary">
+        Add Product
+      </button>
     </div>
     <% @collection_products.each do |product| %>
       <div class="col-md-12 product_row">

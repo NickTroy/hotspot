@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   
   resources :collections do
     delete '/unassign_product', to: "collections#unassign_product"
+    post '/assign_product', to: "collections#assign_product"
     post '/update_collection_image', to: 'collections#update_collection_image'
     delete '/delete_image', to: 'collections#delete_image'
   end
