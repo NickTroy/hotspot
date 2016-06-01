@@ -73,7 +73,6 @@ class CollectionsController < AuthenticatedController
       @product_image_source = @product.image.src
     end
     if @collect.save
-      binding.pry
       render json: { product_title: @product.title, product_image_src: @product_image_src }, status: 200
     else
       render json: { message: "failed" }, status: 500

@@ -78,6 +78,7 @@ $(document).ready(function(){
     $('.unassign_product').click(function(){
       var this_product_row = $(this).parents(".product_row");
       var product_id = $(this).data("product_id");
+      var product_title = this_product_row.find('.product_title').text();
       $.ajax({
         url: "<%= collection_unassign_product_url(protocol: 'https', collection_id: @collection.id) %>",
         method: "POST",
@@ -86,6 +87,7 @@ $(document).ready(function(){
           _method: "DELETE"
         },
         success: function(){
+          $('<option value="' + product_id + '">' + product_title + '</option>').appendTo('#add_products');
           this_product_row.remove();
         }
       })
@@ -109,16 +111,21 @@ $(document).ready(function(){
           product_id: product_id
         },
         success: function(product_info){
-          /*var product_title = product_info.product_title;
+          var product_title = product_info.product_title;
           var product_image_src = product_info.product_image_src;
+          var product_image_tag;
+          if ((product_image_src != null) && (product_image_src != undefined) && (product_image_src != "")) {
+            product_image_tag = '<img src="' + product_image_src + '">'
+          } else {
+            product_image_tag = ''
+          }
           $('.select_product').find('option[value="' + product_id + '"]').remove();
           $('<div class="col-md-12 product_row">' +
-              '<div class="col-md-2 col-lg-2">' + product_title + '</div>' +
-              '<div class="col-md-2 col-lg-2 text-center">' +
-                '<img src="' + product_image_src + '">' +
+              '<div class="col-md-2 col-lg-2 product_title">' + product_title + '</div>' +
+              '<div class="col-md-2 col-lg-2 text-center">' + product_image_tag +
               '</div>' +
               '<div class="col-md-1 col-lg-1 text-center unassign_product" data-product_id="' + product_id + '"><strong>X</strong></div>' +
-            '</div>').insertAfter('.product_row:last');
+            '</div>').appendTo('.products_container');
           $('.unassign_product:last').click(function(){
             var this_product_row = $(this).parents(".product_row");
             var product_id = $(this).data("product_id");
@@ -130,10 +137,11 @@ $(document).ready(function(){
                 _method: "DELETE"
               },
               success: function(){
+                $('<option value="' + product_id + '">' + product_title + '</option>').appendTo('#add_products');
                 this_product_row.remove();
               }
             })
-          })*/
+          })
         }
       })
     });
@@ -236,7 +244,7 @@ $(document).ready(function(){
     </div>
     <% @collection_products.each do |product| %>
       <div class="col-md-12 product_row">
-        <div class="col-md-2 col-lg-2"><%= product.title %></div>
+        <div class="col-md-2 col-lg-2 product_title"><%= product.title %></div>
         <div class="col-md-2 col-lg-2 text-center">
           <%= img_tag product.image.src unless product.image.nil? %>
         </div>
