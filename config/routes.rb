@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     delete '/delete_image', to: 'collections#delete_image'
   end
   
+  resources :interfaces
+  
   controller :sessions do
     get 'login' => :new, :as => :login
     post 'login' => :create, :as => :authenticate

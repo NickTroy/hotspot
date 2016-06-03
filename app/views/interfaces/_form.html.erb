@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="col-md-12">
+
+  <% if flash[:error] %>
+  <div class="alert alert-danger" role="alert">
+    <ul>
+    <% flash[:error].each do |error| %>
+      <li><%= error %></li>
+    <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <%= form_for @interface do |f|  %>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.label "interface[title]", "Title:" %>
+      <%= f.text_field :title, class: "form-control" %>     
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+     <%= f.submit "Save", class: "btn btn-success" %>
+    </div>
+  </div>
+  <% end %>  
+</div>

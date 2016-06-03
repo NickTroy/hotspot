@@ -1,0 +1,26 @@
+<% if notice %>
+  <div class="alert alert-success" role="alert">
+    <%= notice %>
+  </div>
+<% end %>
+<div class="interfaces_listing">
+  <div class="row">
+    <div class="col-md-4">
+      <strong>Interface Title</strong>
+    </div>
+    <div class="col-md-4">
+      <strong>Delete Interface</strong>
+    </div>
+  </div>  
+  <% @interfaces.each do |interface| %>
+  <div class="row interface_row">
+    <div class="col-md-4">
+      <%= link_to interface.title, edit_interface_url(protocol: 'https', id: interface.id) %>
+    </div>
+    <div class="col-md-4">
+      <%= link_to "Delete", interface_url(protocol: 'https', id: interface.id), :method => :delete, :confirm => "Are you sure you want to delete this interface?" %>
+    </div>
+  </div>
+  <% end %>
+</div>
+<%= link_to "Add New Interface", new_interface_url(protocol: 'https'), class: "btn btn-primary" %>

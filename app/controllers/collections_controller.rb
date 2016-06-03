@@ -2,7 +2,8 @@ class CollectionsController < AuthenticatedController
   require 'base64'
   skip_before_action :verify_authenticity_token
   def index
-    @collections = ShopifyAPI::CustomCollection.all.to_a
+    @collections = ShopifyAPI::CustomCollection.all
+    @interfaces = Interface.all
   end 
   
   def new
