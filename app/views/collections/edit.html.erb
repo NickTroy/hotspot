@@ -252,6 +252,15 @@ $(document).ready(function(){
       </div>
     <% end %>
   </div>
+  
+  <div class="row">
+    <h3>Interfaces</h3>
+    <% @interfaces.each do |interface| %>
+      <div class="col-md-12">
+        <%= interface.title %>
+      </div>
+    <% end %>
+  </div>
 
   <div class="row">
     <div class="col-md-2">

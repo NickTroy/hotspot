@@ -12,6 +12,7 @@ class CollectionsController < AuthenticatedController
   
   def edit
     @collection = ShopifyAPI::CustomCollection.find(params[:id])
+    @interfaces = Interface.all
     @collection_products = @collection.products
     @product_builder_collection = ShopifyAPI::SmartCollection.where(:title => "Product_builder_products")[0]
     @all_products = ShopifyAPI::Product.find(:all, :params => { :limit => 250, :collection_id => @product_builder_collection.id})
