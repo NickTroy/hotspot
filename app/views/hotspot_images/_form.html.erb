@@ -10,17 +10,34 @@
     </ul>
   </div>
   <% end %>
-  <%= form_for @hotspot_image, url: "/hotspot_images" do |f|  %>
-  <div class="row">
-    <div class="col-md-6">
-      <%= f.label "hotspot_image[title]", "Title:" %>
-      <%= f.text_field :title, class: "form-control" %>     
+  <% if params[:action] == 'new' %>
+    <%= form_for @hotspot_image, url: "/hotspot_images" do |f|  %>
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.label "hotspot_image[title]", "Title:" %>
+        <%= f.text_field :title, class: "form-control" %>     
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-     <%= f.submit "Save", class: "btn btn-success" %>
+    <div class="row">
+      <div class="col-md-6">
+       <%= f.submit "Save", class: "btn btn-success" %>
+      </div>
     </div>
-  </div>
-  <% end %>  
+    <% end %>  
+  <% else %>
+    <%= form_for @hotspot_image do |f|  %>
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.label "hotspot_image[title]", "Title:" %>
+        <%= f.text_field :title, class: "form-control" %>     
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+       <%= f.submit "Save", class: "btn btn-success" %>
+      </div>
+    </div>
+    <% end %>  
+  <% end %>
+  
 </div>

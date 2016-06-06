@@ -3,7 +3,6 @@ class HotspotImagesController < ApplicationController
   
   def new
     @hotspot_image = HotspotImage.new
-    binding.pry
   end
   
   def edit
