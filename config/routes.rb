@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     post '/assign_product', to: "collections#assign_product"
     post '/update_collection_image', to: 'collections#update_collection_image'
     delete '/delete_image', to: 'collections#delete_image'
+    post '/assign_hotspot_image', to: 'collections#assign_hotspot_image'
   end
   
   resources :interfaces

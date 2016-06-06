@@ -14,6 +14,10 @@ class CollectionsController < AuthenticatedController
   def edit
     @collection = ShopifyAPI::CustomCollection.find(params[:id])
     @interfaces = Interface.all
+    @interfaces_and_hotspot_images =  HotspotImage.select("hotspot_images.id as hotspot_image_id, hotspot_images.title as hotspot_image_title, interfaces.id as interface_id, interfaces.title as interface_title")
+                                                  .joins("inner join collections_hotspot_images on collections_hotspot_images.collection_id = #{ @collection.id } and hotspot_images.id = collections_hotspot_images.hotspot_image_id")
+                                                  .joins("right join interfaces on interfaces.id = hotspot_images.interface_id").uniq
+    @all_hotspot_images = HotspotImage.all
     @collection_products = @collection.products
     @product_builder_collection = ShopifyAPI::SmartCollection.where(:title => "Product_builder_products")[0]
     @all_products = ShopifyAPI::Product.find(:all, :params => { :limit => 250, :collection_id => @product_builder_collection.id})
@@ -80,6 +84,16 @@ class CollectionsController < AuthenticatedController
     else
       render json: { message: "failed" }, status: 500
     end
+  end
+  
+  def assign_hotspot_image
+    @interface = Interface.find(params[:interface_id])
+    @hotspot_image = HotspotImage.find(params[:hotspot_image_id])
+    @collection = ShopifyAPI::CustomCollection.find(params[:collection_id])
+    @collection_hotspot_image = CollectionsHotspotImage.create(collection_id: @collection.id, hotspot_image_id: @hotspot_image.id)
+    @interface.hotspot_images << @hotspot_image
+    
+    render json: { message: "assigned" }, status: 200
   end
   
   def delete_image
