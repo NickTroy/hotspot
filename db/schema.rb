@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160601141832) do
+ActiveRecord::Schema.define(version: 20160606080756) do
 
   create_table "collections_hotspot_images", force: :cascade do |t|
     t.integer  "hotspot_image_id", limit: 4
@@ -23,9 +23,10 @@ ActiveRecord::Schema.define(version: 20160601141832) do
   add_index "collections_hotspot_images", ["hotspot_image_id"], name: "index_collections_hotspot_images_on_hotspot_image_id", using: :btree
 
   create_table "hotspot_images", force: :cascade do |t|
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.integer  "interface_id", limit: 4
+    t.string   "title",        limit: 255
   end
 
   add_index "hotspot_images", ["interface_id"], name: "index_hotspot_images_on_interface_id", using: :btree

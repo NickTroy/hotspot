@@ -1,0 +1,26 @@
+<% if notice %>
+  <div class="alert alert-success" role="alert">
+    <%= notice %>
+  </div>
+<% end %>
+<div class="hotspot_images_listing">
+  <div class="row">
+    <div class="col-md-4">
+      <strong>Hotspot Image Title</strong>
+    </div>
+    <div class="col-md-4">
+      <strong>Delete Hotspot Image</strong>
+    </div>
+  </div>  
+  <% @hotspot_images.each do |hotspot_image| %>
+  <div class="row hotspot_image_row">
+    <div class="col-md-4">
+      <%= link_to hotspot_image.title, edit_hotspot_image_url(protocol: 'https', id: hotspot_image.id) %>
+    </div>
+    <div class="col-md-4">
+      <%= link_to "Delete", hotspot_image_url(protocol: 'https', id: hotspot_image.id), :method => :delete, :confirm => "Are you sure you want to delete this hotspot image?" %>
+    </div>
+  </div>
+  <% end %>
+</div>
+<%= link_to "Add New Hotspot Image", new_hotspot_image_url(protocol: 'https'), class: "btn btn-primary" %>

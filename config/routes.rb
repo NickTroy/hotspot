@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   
+  get 'hotspot/images'
+
   resources :collections do
     delete '/unassign_product', to: "collections#unassign_product"
     post '/assign_product', to: "collections#assign_product"
@@ -8,6 +10,7 @@ Rails.application.routes.draw do
   end
   
   resources :interfaces
+  resources :hotspot_images
   
   controller :sessions do
     get 'login' => :new, :as => :login

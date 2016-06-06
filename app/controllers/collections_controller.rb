@@ -4,6 +4,7 @@ class CollectionsController < AuthenticatedController
   def index
     @collections = ShopifyAPI::CustomCollection.all
     @interfaces = Interface.all
+    @hotspot_images = HotspotImage.all
   end 
   
   def new
