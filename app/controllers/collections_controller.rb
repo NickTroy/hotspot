@@ -15,7 +15,7 @@ class CollectionsController < AuthenticatedController
     @collection = ShopifyAPI::CustomCollection.find(params[:id])
     @interfaces = Interface.all
     @interfaces_and_hotspot_images =  HotspotImage.select("hotspot_images.id as hotspot_image_id, hotspot_images.title as hotspot_image_title, interfaces.id as interface_id, interfaces.title as interface_title")
-                                                  .joins("inner join collections_hotspot_images on collections_hotspot_images.collection_id = 103888324 and hotspot_images.id = collections_hotspot_images.hotspot_image_id")
+                                                  .joins("inner join collections_hotspot_images on collections_hotspot_images.collection_id = #{ @collection.id } and hotspot_images.id = collections_hotspot_images.hotspot_image_id")
                                                   .joins("right join interfaces on collections_hotspot_images.interface_id = interfaces.id").uniq
     @all_hotspot_images = HotspotImage.all
     @collection_products = @collection.products
@@ -90,9 +90,12 @@ class CollectionsController < AuthenticatedController
     @interface = Interface.find(params[:interface_id])
     @hotspot_image = HotspotImage.find(params[:hotspot_image_id])
     @collection = ShopifyAPI::CustomCollection.find(params[:collection_id])
-    @collection_hotspot_image = CollectionsHotspotImage.create(collection_id: @collection.id, hotspot_image_id: @hotspot_image.id, interface_id: @interface.id)
-    
-    render json: { message: "assigned" }, status: 200
+    @collection_hotspot_image = CollectionsHotspotImage.find_by(collection_id: @collection.id, hotspot_image_id: @hotspot_image.id) || CollectionsHotspotImage.create(collection_id: @collection.id, hotspot_image_id: @hotspot_image.id)
+    if @collection_hotspot_image.update_attributes(interface_id: @interface.id)
+      render json: { message: "assigned" }, status: 200
+    else 
+      render json: { message: "failed" }, status: 500
+    end
   end
   
   def delete_image
