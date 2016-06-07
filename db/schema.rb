@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160607103758) do
+ActiveRecord::Schema.define(version: 20160607135738) do
 
   create_table "collections_hotspot_images", force: :cascade do |t|
     t.integer  "hotspot_image_id", limit: 4
@@ -31,9 +31,10 @@ ActiveRecord::Schema.define(version: 20160607103758) do
   end
 
   create_table "interfaces", force: :cascade do |t|
-    t.string   "title",      limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "title",                   limit: 255
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "collections_limit_count", limit: 4
   end
 
   create_table "shops", force: :cascade do |t|

@@ -6,6 +6,7 @@ class InterfacesController < ApplicationController
   end
   
   def edit
+    @collections_count = CollectionsHotspotImage.where(interface_id: @interface.id).count
   end
   
   def create
@@ -40,7 +41,7 @@ class InterfacesController < ApplicationController
   private
   
   def interface_params
-    params.require("interface").permit("title")
+    params.require("interface").permit(:title, :collections_limit_count)
   end
   
   def set_interface

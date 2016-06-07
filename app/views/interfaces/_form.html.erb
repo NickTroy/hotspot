@@ -12,11 +12,19 @@
   <% end %>
   <%= form_for @interface do |f|  %>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
       <%= f.label "interface[title]", "Title:" %>
       <%= f.text_field :title, class: "form-control" %>     
     </div>
-  </div>
+    <div class="col-md-6">
+      <p class="text-center"><strong>Current Count Of Collections In This Interface:</strong></p>
+      <p class="text-center"><%= @collections_count %></p>     
+    </div>
+    <div class="col-md-6">
+      <%= f.label "interface[collections_limit_count]", "Collections Limit Count:" %>
+      <%= f.number_field :collections_limit_count, class: "form-control", min: @collections_count, max: 100 %>     
+    </div>
+  </div><br>
   <div class="row">
     <div class="col-md-6">
      <%= f.submit "Save", class: "btn btn-success" %>
