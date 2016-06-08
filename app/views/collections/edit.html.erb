@@ -161,6 +161,11 @@ $(document).ready(function(){
         },
         success: function(){
           alert("success")
+        },
+        error: function(e){
+          console.log(e);
+          alert(e.responseJSON.message);
+          clicked_select_image.val("0")
         }
       })
     });
@@ -169,7 +174,6 @@ $(document).ready(function(){
     <% @interfaces_and_hotspot_images.each do |interface_and_hotspot_image| %>
     select_image = $('.interface_row[data-interface_id="' + <%= interface_and_hotspot_image.interface_id %> + '"]').find('.select_hotspot_image');
     select_image.val('<%= interface_and_hotspot_image.hotspot_image_id.nil? ? "0" : interface_and_hotspot_image.hotspot_image_id  %>')
-    console.log(select_image);
     <% end %>
   });
 </script>

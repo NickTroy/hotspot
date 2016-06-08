@@ -11,6 +11,7 @@ class InterfacesController < ApplicationController
   
   def create
     @interface = Interface.new(interface_params)
+    @interface.collections_limit_count = 5 if @interface.collections_limit_count.nil?
     if @interface.save
       flash[:notice] = 'Interface was successfully created.'
       redirect_to root_url(protocol: 'https')

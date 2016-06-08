@@ -88,6 +88,11 @@ class CollectionsController < AuthenticatedController
   
   def assign_hotspot_image
     @interface = Interface.find(params[:interface_id])
+    current_collections_count = CollectionsHotspotImage.where(interface_id: @interface.id).count
+    if @interface.collections_limit_count == current_collections_count 
+      render json: { message: "Can't assign image to this interface because collections limit(#{ @interface.collections_limit_count }) in this interface was reached" }, status: 500
+      return
+    end
     @hotspot_image = HotspotImage.find(params[:hotspot_image_id])
     @collection = ShopifyAPI::CustomCollection.find(params[:collection_id])
     @collection_hotspot_image = CollectionsHotspotImage.find_by(collection_id: @collection.id, hotspot_image_id: @hotspot_image.id) || CollectionsHotspotImage.create(collection_id: @collection.id, hotspot_image_id: @hotspot_image.id)
