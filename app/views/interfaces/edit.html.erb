@@ -1,1 +1,10 @@
 <%= render 'form' %>
+  <div class="row">
+    <% @interface_collections.each do |collection| %>
+    <div class="col-md-12">
+      <div class="col-md-4">
+        <strong><%= collection.title %></strong>
+      </div>
+    </div>
+    <% end %>
+  </div>

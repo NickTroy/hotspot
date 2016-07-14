@@ -1,4 +1,4 @@
-class InterfacesController < ApplicationController
+class InterfacesController < AuthenticatedController
   before_action :set_interface, only: [:edit, :update, :destroy]
   
   def new
@@ -7,6 +7,10 @@ class InterfacesController < ApplicationController
   
   def edit
     @collections_count = CollectionsHotspotImage.where(interface_id: @interface.id).count
+    @interface_collections = []
+    CollectionsHotspotImage.where(interface_id: @interface.id).each do |collection_hotspot_image|
+      @interface_collections.push(ShopifyAPI::CustomCollection.find(collection_hotspot_image.collection_id))
+    end
   end
   
   def create
